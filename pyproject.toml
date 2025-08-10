@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "chat-a2a"
+version = "0.0.1"
+description = ""
+authors = ["qiankunli <qiankunli@qq.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.14"
+fastapi = "^0.115.5"
+dependency-injector = "^4.45.0"
+loguru = "^0.7.3"
+pydantic-extra-types = "^2.10.2"
+uvicorn = "^0.34.0"
+pydantic-settings = "^2.8.1"
+typing-extensions = "^4.13.2"
+redis = "^6.2.0"
+apscheduler = "^3.11.0"
+a2a-sdk = "^0.3.0"
+httpx = "^0.28.1"
+msgspec = "^0.19.0"
+sqlalchemy = "^2.0.42"
+sqlalchemy-crud-plus = "1.9.0"
+langgraph = "^0.6.4"
+langchain = "^0.3.27"
+uuid6 = "^2025.0.1"
+langchain-community = "^0.3.27"
+aiomysql = "^0.2.0"
+greenlet = "^3.2.4"
+openai = "^1.99.6"
+jinja2 = "^3.1.6"
+
+[tool.poetry.group.lint.dependencies]
+mypy = "1.15.0"
+importanize = "0.7.0"
+ruff = "0.4.8"
+types-pymysql = "1.1.0.20250516"
+types-cachetools = "^6.1.0.20250717"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+pytest-asyncio = "^0.25.3"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[[tool.poetry.source]]
+name = "tuna"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+priority = "supplemental"

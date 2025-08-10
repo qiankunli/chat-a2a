@@ -1,0 +1,56 @@
+line-length = 120
+unsafe-fixes = true
+cache-dir = ".ruff_cache"
+target-version = "py310"
+
+[lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "TCH",
+    # W
+    "W505",
+    # PT
+    "PT018",
+    # SIM
+    "SIM101",
+    "SIM114",
+    # PGH
+    "PGH004",
+    # PL
+    "PLE1142",
+    # RUF
+    "RUF100",
+    # UP
+    "UP007"
+]
+preview = true
+ignore = ["FURB101"]
+exclude = ["common/log.py"]
+
+[lint.flake8-pytest-style]
+mark-parentheses = false
+parametrize-names-type = "list"
+parametrize-values-row-type = "list"
+parametrize-values-type = "tuple"
+
+[lint.flake8-unused-arguments]
+ignore-variadic-names = true
+
+[lint.isort]
+lines-between-types = 1
+order-by-type = true
+
+[lint.per-file-ignores]
+"**/api/v1/*.py" = ["TCH"]
+"**/model/*.py" = ["TCH003"]
+"**/model/__init__.py" = ["F401"]
+"**/tests/*.py" = ["E402", "E501"]
+"pkg/utils/cypher/*.py" = ["F403", "F405"]
+
+
+[format]
+preview = true
+quote-style = "single"
+docstring-code-format = true
