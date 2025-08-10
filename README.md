@@ -30,4 +30,5 @@ chat-a2a 是一个支持a2a协议的multiagent 问答服务。 项目特点
 # 联系我
 
 项目仍不完善，欢迎共创
+
 <img src="assets/wechat-qrcode.jpg" alt="WeChat QR Code" width="350" height="350"/>
