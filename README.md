@@ -16,9 +16,20 @@ chat-a2a 是一个支持a2a协议的multiagent 问答服务。 项目特点
 原生multiagent 体现在
 
 1. 项目默认采用plan ==> remote agent ==> plan ==> ... ==> report 链路来回答问题
-2. 数据库message表负责存储问答记录，除了用户问题和最终回答外（有report 组件提供），额外记录了`<子问题、agent回答>`
+2. agent问答记录直接存在message表中，地位与用户问题、最终答案相同。
 
-## 支持反问
+   |id|conv_id|task_id|role|type|content|agent|
+   |---|---|---|---|---|---|---|
+   |1|conv1|task1|user||天气如何||
+   |2|conv1|task1|agent|query|天气如何|plan|
+   |3|conv1|task1|agent|input_required|您问到哪里的天气|weather|
+   |4|conv1|task1|user||上海||
+   |5|conv1|task1|agent|query|上海天气如何|plan|
+   |6|conv1|task1|agent|answer|上海天气很热|weather|
+   |7|conv1|task1|assistant||上海天气很热||
+
+
+## 关于反问的处理
 
 支持反问相关设计如下
 
@@ -27,8 +38,10 @@ chat-a2a 是一个支持a2a协议的multiagent 问答服务。 项目特点
 3. 用户/前端和gate_agent 并不感知某条agent 输出是否是反问，而是根据message表跟踪agent 执行记录。这样做可以让gate_agent
    无需引入类似langgraph checkpoint机制 ，更灵活一些。
 
+如果用户在反问场景下，直接输入新问题，则仍沿用之前的task_id 会有问题，后续会继续优化。
+
 # 联系我
 
 项目仍不完善，欢迎共创
 
-<img src="assets/wechat-qrcode.jpg" alt="WeChat QR Code" width="350" height="350"/>
+<img src="assets/wechat-qrcode.jpg" alt="WeChat QR Code" width="350" height="450"/>
