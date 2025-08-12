@@ -67,3 +67,5 @@ class DefaultAgent(RemoteAgent):
                     elif state == TaskState.completed:
                         yield StreamMessage(content=text, role=MessageRole.AGENT,)
                         return
+                    elif state == TaskState.working:
+                        yield StreamMessage(content=text, role=MessageRole.AGENT, )

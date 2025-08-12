@@ -16,7 +16,7 @@ chat-a2a 是一个支持a2a协议的multiagent 问答服务。 项目特点
 原生multiagent 体现在
 
 1. chat-a2a 只负责通过gate-agent(plan) 编排remote agent回答问题（也可以在chat-a2a中实现local agent），自身并不负责直接回答问题。
-   1. 默认采用plan ==> remote agent ==> plan ==> ... ==> report 链路来回答问题
+   1. 默认采用集中式编排范式，由主控 Agent（Planner）负责接收用户输入、拆分任务、分配给子 Agent 执行。plan ==> remote agent ==> plan ==> ... ==> report 链路来回答问题
    2. chat-a2a负责维护会话、用户（还未加）、聊天等数据，remote agent 只负责根据输入给出输出即可（可以考虑接入mcp），理论上无需再访问db等。
 3. agent问答记录直接存在message表中，地位与用户问题、最终答案相同。
 
@@ -40,7 +40,14 @@ chat-a2a 是一个支持a2a协议的multiagent 问答服务。 项目特点
 3. 用户/前端和gate_agent 并不感知某条agent 输出是否是反问，而是根据message表跟踪agent 执行记录。这样做可以让gate_agent
    无需引入类似langgraph checkpoint机制 ，更灵活一些。
 
-如果用户在反问场景下，直接输入新问题，则仍沿用之前的task_id 会有问题，后续会继续优化。
+如果用户在反问场景下，不回应agent返回而是直接输入新问题，则仍沿用之前的task_id 会有问题，后续会继续优化。
+
+```
+用户：天气如何
+AI：您问哪里的天气？
+用户：曹操是谁
+AI：xx
+```
 
 # 联系我
 
