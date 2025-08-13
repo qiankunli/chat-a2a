@@ -2,7 +2,7 @@ from typing import List
 
 from pydantic import Field
 
-from agent.model import Message, MessageRole, MessageType, CallAgent
+from agent.model import Message, MessageRole, MessageType
 from app.do.base import DOAttributeBase
 from app.do.message_do import MessageDO
 from app.model.conversation_po import ConversationModel
@@ -28,28 +28,28 @@ class ConversationDO(DOAttributeBase):
                 message.role in [MessageRole.USER, MessageRole.ASSISTANT]]
 
     @property
-    def input_required_task_id(self) -> str | None:
+    def current_intention_id(self) -> str | None:
+        # 当前无法精确判断用户意图是否已经切换，所以意图可能会跨多个问题，但尽量避免切碎问题
         if not self.messages:
             return None
-        task_id = None
-        # 寻找反问且未得到解答的的task_id
+        intention_id = None
+        # 寻找反问且未得到解答的的intention_id
         for message in self.messages:
             if message.type == MessageType.INPUT_REQUIRED:
-                task_id = message.task_id
+                intention_id = message.intention_id
             if message.role == MessageRole.ASSISTANT:
-                # 该task_id 关联的问题已得到解答
-                if task_id and task_id == message.task_id:
-                    task_id = None
-        return task_id
+                # 该intention_id 关联的问题已得到解答
+                if intention_id and intention_id == message.intention_id:
+                    intention_id = None
+        return intention_id
 
-    def agent_history(self, task_id: str) -> List[Message] | None:
+    def agent_history(self, intention_id: str) -> List[Message] | None:
         if not self.messages:
             return None
-        task_id = None
         ret = []
-        # 寻找反问且未得到解答的的task_id
+        # 寻找反问且未得到解答的的intention_id
         for message in self.messages:
-            if message.task_id != task_id:
+            if message.intention_id != intention_id:
                 continue
             if message.role != MessageRole.AGENT:
                 continue

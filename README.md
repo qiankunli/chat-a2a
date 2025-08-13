@@ -20,23 +20,40 @@ chat-a2a 是一个支持a2a协议的multiagent 问答服务。 项目特点
    2. chat-a2a负责维护会话、用户（还未加）、聊天等数据，remote agent 只负责根据输入给出输出即可（可以考虑接入mcp），理论上无需再访问db等。
 3. agent问答记录直接存在message表中，地位与用户问题、最终答案相同。
 
-   |id|conv_id|task_id|role|type|content|agent|
-   |---|---|---|---|---|---|---|
-   |1|conv1|task1|user||天气如何||
-   |2|conv1|task1|agent|query|天气如何|plan|
-   |3|conv1|task1|agent|input_required|您问到哪里的天气|weather|
-   |4|conv1|task1|user||上海||
-   |5|conv1|task1|agent|query|上海天气如何|plan|
-   |6|conv1|task1|agent|answer|上海天气很热|weather|
-   |7|conv1|task1|assistant||上海天气很热||
+   |id|conv_id| intention_id|role|type|content|agent|
+   |---|---|------------|---|---|---|---|
+   |1|conv1| intention1 |user||天气如何||
+   |2|conv1| intention1 |agent|query|天气如何|plan|
+   |3|conv1| intention1 |agent|input_required|您问到哪里的天气|weather|
+   |4|conv1| intention1 |user||上海||
+   |5|conv1| intention1 |agent|query|上海天气如何|plan|
+   |6|conv1| intention1 |agent|answer|上海天气很热|weather|
+   |7|conv1| intention1 |assistant||上海天气很热||
 
+## 意图
+
+关于问答
+1. 最小粒度的概念是message_id
+2. 最大粒度的概念是conversation_id
+两者之间，一个较为中间粒度的概念是意图/intention_id(本来想叫task_id，但不想跟a2a 中的task_id对应)
+
+考虑到问答链路， 以是否有人工参与，分为以下场景
+1. 简单问答，无需人工，plan 调度几次agent 即可回答
+  1. plan ==> agent ==> report
+  2. plan ==> agent1 ==> plan => agent2 ==> report 
+  3. plan ==> agent1 ==> plan ==> agent1 ==> report。（假设agent1 是一个检索agent，则在一次问答时可能被多次调用）
+2. 复杂问答
+  1. plan ==> agent1(input_required) ==> user ==> plan ==> agent1 ==> report 
+  2. plan ==> agent1(input_required) ==> user ==> plan ==> agent1 ==> plan ==> agent2 ==> report
+
+这些message 在db 里共用一个intention_id，主要用于在带有input_required场景下第二次user 进入plan时， 为plan恢复plan的上下文。
 
 ## 关于反问的处理
 
 支持反问相关设计如下
 
-1. 子agent 反问通过input_required 来表达，这也是a2a推荐的方式
-2. 反问场景下，用户两次输入的问题属于同一个task_id(a2a中的概念)
+1. local/remote agent 反问通过input_required 来表达，这也是a2a推荐的方式
+2. 反问场景下，用户两次输入的问题属于同一个intention_id
 3. 用户/前端和gate_agent 并不感知某条agent 输出是否是反问，而是根据message表跟踪agent 执行记录。这样做可以让gate_agent
    无需引入类似langgraph checkpoint机制 ，更灵活一些。
 

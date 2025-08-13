@@ -3,7 +3,7 @@ from typing import AsyncGenerator, List
 
 from langchain_core.language_models import BaseChatModel
 
-from agent.model import GateContext, Message, UserRequest
+from agent.model import CallAgent, GateContext, UserRequest
 
 
 class BaseReporter(ABC):
@@ -12,5 +12,5 @@ class BaseReporter(ABC):
 
     @abstractmethod
     async def report(self, context: GateContext, user_request: UserRequest,
-                     messages: List[Message]) -> AsyncGenerator[str, None]:
+                     call_agents: List[CallAgent]) -> AsyncGenerator[str, None]:
         pass

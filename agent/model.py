@@ -22,7 +22,6 @@ class Message(BaseModel):
     content: str
     role: MessageRole
 
-
     @classmethod
     def create(cls, content: str, role: str | MessageRole) -> "Message":
         if isinstance(role, str):
@@ -65,11 +64,10 @@ class CallAgent(BaseModel):
     reason: str | None = None
 
 
-
 class GateContext(BaseModel):
     """gate agent问答所需的上下文，问答时确定，但与用户最新请求无关"""
     conversation_id: str
-    task_id: str
+    intention_id: str
     # 用户聊天历史记录
     chat_history: List[Message] | None
     # agent执行记录

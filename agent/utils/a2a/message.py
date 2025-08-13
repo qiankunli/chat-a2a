@@ -1,11 +1,11 @@
 from typing import Tuple
 
-from a2a.types import Message, Task, TaskArtifactUpdateEvent, TaskState, TaskStatusUpdateEvent, TextPart, Part
+from a2a.types import Message, Task, TaskArtifactUpdateEvent, TaskState, TaskStatusUpdateEvent, TextPart
 
 
 def get_text_from_message_parts(result: Task | Message | TaskStatusUpdateEvent | TaskArtifactUpdateEvent,
                                 part_index: int = 0) -> Tuple[TaskState | None, str | None]:
-    #todo 很不完整
+    # todo 很不完整
     if isinstance(result, Task):
         artifacts = result.artifacts
         if not artifacts:
@@ -14,11 +14,16 @@ def get_text_from_message_parts(result: Task | Message | TaskStatusUpdateEvent |
         if isinstance(part_root, TextPart):
             return result.status.state, part_root.text
     elif isinstance(result, Message):
-        return None, result.parts[part_index].text
-    elif isinstance(result, TaskStatusUpdateEvent):
-        part_root = result.status.message.parts[part_index].root
+        part_root = result.parts[part_index].root
         if isinstance(part_root, TextPart):
-            return result.status.state, part_root.text
+            return None, part_root.text
+    elif isinstance(result, TaskStatusUpdateEvent):
+        if result.status.message:
+            part_root = result.status.message.parts[part_index].root
+            if isinstance(part_root, TextPart):
+                return result.status.state, part_root.text
     elif isinstance(result, TaskArtifactUpdateEvent):
-        return None, result.artifact.content
+        part_root = result.artifact.parts[part_index].root
+        if isinstance(part_root, TextPart):
+            return None, part_root.text
     return None, None

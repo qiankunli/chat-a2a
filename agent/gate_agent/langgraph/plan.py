@@ -15,9 +15,10 @@ from agent.gate_agent.langgraph.event import (
     dispatch_answer_end_event,
     dispatch_answer_event,
     dispatch_header_event,
-    dispatch_message_event, dispatch_input_required_event,
+    dispatch_input_required_event,
+    dispatch_message_event,
 )
-from agent.model import CallAgent, GateAgentConfig, GateContext, MessageRole, SendMessage, UserRequest, MessageType
+from agent.model import CallAgent, GateAgentConfig, GateContext, MessageRole, MessageType, SendMessage, UserRequest
 from agent.plan.langchain.default import DefaultPlanner
 from agent.remote_agent.factory import get_remote_agent
 from agent.reporter.langchain.default import DefaultReporter

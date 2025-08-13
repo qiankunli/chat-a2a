@@ -31,7 +31,7 @@ openai = "^1.99.6"
 jinja2 = "^3.1.6"
 
 [tool.poetry.group.lint.dependencies]
-mypy = "1.15.0"
+mypy = "^1.17.1"
 importanize = "0.7.0"
 ruff = "0.4.8"
 types-pymysql = "1.1.0.20250516"

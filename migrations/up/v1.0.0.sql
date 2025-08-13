@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS  `conversation` (
 CREATE TABLE IF NOT EXISTS  `message` (
     `id` varchar(36) NOT NULL COMMENT 'id',
     `conversation_id` varchar(36) NOT NULL COMMENT 'conversation id',
-    `task_id` varchar(36) NOT NULL COMMENT 'task id',
+    `intention_id` varchar(36) NOT NULL COMMENT '意图id',
     `role` varchar(36) DEFAULT NULL COMMENT '角色',
     `type` varchar(36) DEFAULT NULL COMMENT '类型',
     `agent` varchar(128) DEFAULT NULL COMMENT 'agent名称',

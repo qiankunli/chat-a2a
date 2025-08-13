@@ -10,7 +10,8 @@ class MessageDO(DOAttributeBase):
     # 插入时id 不作数，只是查询时需要
     id: str = Field(default_factory=uuid7_hex)
     conversation_id: str
-    task_id: str
+    # 用户意图，一般对应一问一答（包含反问等）
+    intention_id: str
     role: MessageRole = MessageRole.USER
     content: str | None = None
     type: MessageType | None = None
@@ -26,4 +27,4 @@ class MessageDO(DOAttributeBase):
 
     @property
     def agent_message(self) -> Message:
-        return Message(role=MessageRole(self.role), content=self.content)
+        return Message(role=MessageRole(self.role), content=self.content or "")

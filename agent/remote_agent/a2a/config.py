@@ -5,7 +5,7 @@ from libs.a2a_runtime.client import AgentDesc
 
 
 class A2AConfig(RemoteAgentConfig):
-    card: AgentCard
+    card: AgentCard | None
 
     @classmethod
     def from_agent_desc(cls, agent_desc: AgentDesc) -> "A2AConfig":

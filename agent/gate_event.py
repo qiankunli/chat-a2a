@@ -28,7 +28,7 @@ class Event(BaseModel):
 class StartEvent(Event):
     event: EventType = EventType.START
     conversation_id: str
-    task_id: str
+    intention_id: str
 
 
 class EndEvent(Event):

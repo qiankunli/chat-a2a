@@ -41,9 +41,9 @@ class DefaultAgent(RemoteAgent):
                     'parts': [
                         {'kind': 'text', 'text': message.content}
                     ],
-                    "task_id": gate_context.task_id,
                     'message_id': uuid7_hex(),
-                    'context_id': gate_context.conversation_id,
+                    # 以意图id 来标记
+                    'context_id': gate_context.intention_id,
                 },
             }
 

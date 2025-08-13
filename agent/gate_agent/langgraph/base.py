@@ -1,3 +1,5 @@
+import logging
+
 from abc import abstractmethod
 from dataclasses import dataclass
 from typing import Any, AsyncGenerator, Dict
@@ -5,10 +7,21 @@ from typing import Any, AsyncGenerator, Dict
 from langchain_core.runnables import Runnable
 
 from agent.base import BaseGateAgent
-from agent.gate_agent.langgraph.event import LCEventType
-from agent.gate_event import AgentEndEvent, AnswerEndEvent, AnswerEvent, Event, EventType, HeaderEvent, MessageEvent, \
-    AgentInputRequiredEvent, AgentErrorEvent
+from agent.gate_agent.langgraph.event import LCCustomEvent, LCEventType
+from agent.gate_event import (
+    AgentEndEvent,
+    AgentErrorEvent,
+    AgentInputRequiredEvent,
+    AnswerEndEvent,
+    AnswerEvent,
+    Event,
+    EventType,
+    HeaderEvent,
+    MessageEvent,
+)
 from agent.model import GateAgentConfig, GateContext, UserRequest
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -41,7 +54,7 @@ class BaseLGGateAgent(BaseGateAgent):
         async for event in response:
             kind = event.get("event")
             if kind == LCEventType.CUSTOM_EVENT:
-                event_detail = event.get("data")
+                event_detail: LCCustomEvent = event.get("data")  # type: ignore
                 if event.get("name") == EventType.HEADER:
                     yield HeaderEvent(chunk=event_detail.content, name=event_detail.from_agent)
                 elif event.get("name") == EventType.MESSAGE:
