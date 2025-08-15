@@ -1,24 +1,17 @@
 # 简介
 
-chat-a2a 是一个支持a2a协议的multiagent 问答服务。 项目特点
-
-1. 原生multiagent 理念来设计问答系统，区分gate_agent和agent
-    1. gate_agent 负责接收用户问题，将问题分发给不同的agent
-    2. agent回答用户问题，分为local agent 和remote agent 两种形式
-2. 基于A2A来访问remote Agent，与[a2a-runtime](https://github.com/qiankunli/a2a-runtime) 配合使用
+chat-a2a 是一个支持a2a协议的，基于multiagent 设计的问答服务。 
 
 <img src="assets/overview.png" alt="overview"/>
 
-# 特性
-
-## 原生multiagent 理念
-
-原生multiagent 体现在
-
-1. chat-a2a 只负责通过gate-agent(plan) 编排remote agent回答问题（也可以在chat-a2a中实现local agent），自身并不负责直接回答问题。
-   1. 默认采用集中式编排范式，由主控 Agent（Planner）负责接收用户输入、拆分任务、分配给子 Agent 执行。plan ==> remote agent ==> plan ==> ... ==> report 链路来回答问题
-   2. chat-a2a负责维护会话、用户（还未加）、聊天等数据，remote agent 只负责根据输入给出输出即可（可以考虑接入mcp），理论上无需再访问db等。
-3. agent问答记录直接存在message表中，地位与用户问题、最终答案相同。
+项目特点
+1. 默认采用multiagent 回答用户问题，即一个问题至少经过一个plan agent和一个execute agent。
+2. 多个agent之间的关系有多种范式，本项目默认采用集中式编排范式，由主控 Agent（Planner）负责接收用户输入、拆分任务、分配给子 Agent 执行。
+   1. 示例链路 query ==> plan ==> agent1 ==> plan ==> agent2 ==> ... ==> report 
+3. 在工程上采用plan agent 与 execute agent 分离的设计，plan agent由本项目负责，execute agent的管理由[a2a-runtime](https://github.com/qiankunli/a2a-runtime) 负责，两个项目之间通过a2a协议通信。
+   1. chat-a2a 只负责通过gate-agent(plan) 编排remote agent回答问题（也可以在chat-a2a中实现local agent），自身并不负责直接回答问题。
+   2. chat-a2a负责维护会话、用户（还未加）、聊天等数据，remote agent 只负责根据输入给出输出即可（可以考虑接入mcp），理论上无需再访问db等存储。
+4. agent问答记录直接存在message表中，地位与用户问题、最终答案相同。
 
    |id|conv_id| intention_id|role|type|content|agent|
    |---|---|------------|---|---|---|---|
@@ -29,6 +22,9 @@ chat-a2a 是一个支持a2a协议的multiagent 问答服务。 项目特点
    |5|conv1| intention1 |agent|query|上海天气如何|plan|
    |6|conv1| intention1 |agent|answer|上海天气很热|weather|
    |7|conv1| intention1 |assistant||上海天气很热||
+
+
+# 特性
 
 ## 意图
 
