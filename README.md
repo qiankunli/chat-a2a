@@ -66,6 +66,24 @@ AI：您问哪里的天气？
 AI：xx
 ```
 
+# 运行
+
+1. 选择一个db，创建chat-a2a 数据库
+2. 运行migrations/up/v1.0.0.sql 创建数据库表
+3. `cp .env.example .env`
+4. 配置.env 文件，主要包括db 连接信息、llm 模型信息
+5. 安装python 依赖
+    ```
+    poetry install
+    ```
+6. 启动a2a-runtime
+7. 运行chat-a2a
+    ```
+    poetry run python -m main
+    # 或配置venv 后运行
+    python main.py
+    ```
+
 # 联系我
 
 项目仍不完善，欢迎共创
